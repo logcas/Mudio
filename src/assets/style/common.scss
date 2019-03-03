@@ -1,0 +1,36 @@
+$mainColor: #31c27c; // 主色调
+$lightColor: #fff; // 副色
+$navbarColor: #F8F7F7; // 导航栏颜色
+$backgroundColor: #F8F8F7; // 页面背景色
+$activeColor: #31c27c; // 导航选中色
+$normalColor: #CBCBCB; // 导航一般状态
+$borderColor: #D3D2D1;
+$titleColor: #666666;
+$unlikeColor: #D8D8D8;
+$buttonColor: #E4E4E4;
+
+@function px2rem($px) {
+  @return ($px / 100) + rem;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden;
+  box-sizing: border-box;
+  background: $backgroundColor;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+// alibaba icon
+.icon {
+  width: 1em;
+  height: 1em;
+  vertical-align: -0.15em;
+  fill: currentColor;
+  overflow: hidden;
+}

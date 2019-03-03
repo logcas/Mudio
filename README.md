@@ -1,4 +1,6 @@
-# vue-music
+# Mudio
+
+A super light music player on web.
 
 ## Project setup
 ```
