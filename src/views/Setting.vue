@@ -34,7 +34,17 @@
 </template>
 
 <script>
+import BScroll from "better-scroll";
 export default {
-  
-}
+  data() {
+    return {
+      scroll: null
+    };
+  },
+  mounted() {
+    this.$nextTick(() => {
+      this.scroll = new BScroll(this.$parent.$el.children[0]);
+    });
+  }
+};
 </script>

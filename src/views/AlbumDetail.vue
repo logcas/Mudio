@@ -1,5 +1,5 @@
 <template>
-  <div class="album-detail">
+  <div class="album-detail" ref="wrapper">
     <public-header></public-header>
     <div class="album-cover">
       <img src="@/assets/cover.jpg" class="cover">
@@ -59,9 +59,21 @@
 </template>
 
 <script>
+import BScroll from "better-scroll";
 import PublicHeader from "@/components/Header.vue";
 export default {
-  components: { PublicHeader }
+  components: { PublicHeader },
+  data() {
+    return {
+      scroll: null
+    };
+  },
+  mounted() {
+    console.log(this.$refs.wrapper);
+    this.$nextTick(() => {
+      //this.scroll = new BScroll(this.$refs.wrapper);
+    });
+  }
 };
 </script>
 
@@ -69,7 +81,7 @@ export default {
 @import "@/assets/style/common.scss";
 
 .album-detail {
-  overflow-y: auto;
+  height: px2rem(1334);
 }
 
 .album-cover {

@@ -1,5 +1,5 @@
 <template>
-  <div class="album" @click="$router.push({ name: 'album', uid })">
+  <div class="album" @click="$router.push({ name: 'album', params: { uid } })">
     <img class="cover" src="@/assets/cover.jpg">
     <svg class="icon like" aria-hidden="true">
       <use xlink:href="#iconxihuan"></use>

@@ -9,6 +9,7 @@
     "test:unit": "vue-cli-service test:unit"
   },
   "dependencies": {
+    "better-scroll": "^1.14.1",
     "fastclick": "^1.0.6",
     "vue": "^2.6.6",
     "vue-router": "^3.0.1",
