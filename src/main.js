@@ -2,11 +2,15 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store'
+import FastClick from 'fastclick';
+FastClick.attach(document.body);
+
 import '@/assets/style/common.scss';
 import '@/assets/js/rem.js';
 import '@/assets/js/iconfont.js';
-import FastClick from 'fastclick';
-FastClick.attach(document.body);
+
+import apis from '@/http/api';
+Vue.prototype.$http = apis;
 
 Vue.config.productionTip = false
 

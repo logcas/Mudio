@@ -11,6 +11,10 @@
 <script>
 export default {
   name: "progress-bar",
+  props: {
+    current: Number,
+    totalLength: Number,
+  },
   computed: {
     currentProgress() {
       return (this.current / this.totalLength) * 100 + "%";
@@ -18,8 +22,6 @@ export default {
   },
   data() {
     return {
-      totalLength: 0,
-      current: 66,
       trackLeft: 0,
 
       isMoving: false,
@@ -30,8 +32,6 @@ export default {
     const { left, width } = this.$refs.totalTrack.getBoundingClientRect();
     this.totalLength = width;
     this.trackLeft = left;
-    console.log(this.totalLength);
-    console.log(this.trackLeft);
   },
   methods: {
     handlTrackTouch(e) {
@@ -56,12 +56,10 @@ export default {
     },
     calculateProgress(e) {
       this.touchX = e.changedTouches[0].clientX;
-      console.log("touchx:", this.touchX);
       this.current =
         this.touchX - this.trackLeft > 0 ? this.touchX - this.trackLeft : 0;
       this.current =
         this.current < this.totalLength ? this.current : this.totalLength;
-      console.log(this.current);
     }
   }
 };

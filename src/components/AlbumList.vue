@@ -9,12 +9,7 @@
       </div>
     </div>
     <div class="list-body">
-      <album></album>
-      <album></album>
-      <album></album>
-      <album></album>
-      <album></album>
-      <album></album>
+      <album v-for="(item,key) in data" :key="key" :data="item" :toRoute="toRoute"></album>
     </div>
   </div>
 </template>
@@ -25,6 +20,10 @@ export default {
   components: { Album },
   props: {
     name: String,
+    data: Array,
+    toRoute: {
+      type: String,
+    },
   }
 };
 </script>

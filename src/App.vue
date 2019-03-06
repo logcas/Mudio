@@ -3,7 +3,7 @@
     <transition name="fade">
       <router-view/>
     </transition>
-    <player :style="{ top: playerOffset }"></player>
+    <player :style="{ top: playerOffset }" style="z-index: 99999"></player>
   </div>
 </template>
 

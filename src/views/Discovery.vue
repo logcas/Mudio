@@ -1,27 +1,41 @@
 <template>
   <div class="discovery">
-    <h1 class="title">探索
-      <img src="@/assets/cover.jpg" class="playingAlbum" @click="showPlayer" :class="{ rotate: isPlaying }">
+    <h1 class="title">
+      Mudio
+      <img
+        :src="currentSong.picUrl || '@/assets/cover.jpg'"
+        class="playingAlbum"
+        @click="showPlayer"
+        :class="{ rotate: isPlaying }"
+      >
     </h1>
-    <album-list name="新碟上架"></album-list>
-    <album-list name="推荐歌单"></album-list>
-    <album-list name="热门歌手"></album-list>
+    <album-list name="新碟上架" :data="newestAlbum" toRoute="album"></album-list>
+    <album-list name="推荐歌单" :data="recommandSongs" toRoute="album"></album-list>
+    <album-list name="热门歌手" :data="hottestSingers" toRoute="artist"></album-list>
   </div>
 </template>
 
 <script>
 import BScroll from "better-scroll";
 import AlbumList from "@/components/AlbumList.vue";
-import { mapGetters } from 'vuex';
+import { mapGetters } from "vuex";
 export default {
   components: { AlbumList },
   data() {
     return {
-      scroll: null
+      scroll: null,
+
+      // 主页数据
+      newestAlbum: [],
+      recommandSongs: [],
+      hottestSingers: [],
     };
   },
   computed: {
-    ...mapGetters(['isPlaying']),
+    ...mapGetters(["isPlaying", 'currentSong'])
+  },
+  created() {
+    this.fetchData();
   },
   mounted() {
     this.$nextTick(() => {
@@ -31,6 +45,22 @@ export default {
   methods: {
     showPlayer() {
       this.$store.commit("showPlayer", true);
+    },
+    // 进入时初始化数据
+    async fetchData() {
+      try {
+        let newestAlbum = await this.$http.GetNewestAlbum();
+        this.newestAlbum = newestAlbum.albums;
+
+        let recommandSongs = await this.$http.GetRecommandedSongs();
+        this.recommandSongs = recommandSongs.result;
+
+        let hottestSingers = await this.$http.GetHottestSingers();
+        this.hottestSingers = hottestSingers.artists;
+
+      } catch (e) {
+        console.log(`error occured: ${e}`);
+      }
     }
   }
 };

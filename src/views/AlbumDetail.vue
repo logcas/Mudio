@@ -1,11 +1,11 @@
 <template>
-  <div class="album-detail" ref="wrapper">
+  <div class="album-detail">
     <public-header></public-header>
     <div class="album-cover">
-      <img src="@/assets/cover.jpg" class="cover">
+      <img :src="album.picUrl" class="cover">
       <div class="album-description">
-        <h1 class="title">专辑名称</h1>
-        <p class="introdction">这是一张专辑XXXX这是一张专辑XXXX这是一张专辑XXXX这是一张专辑XXX</p>
+        <h1 class="title">{{album.name}}</h1>
+        <p class="introdction">{{album.artist.name}}</p>
       </div>
     </div>
     <div class="button-group">
@@ -21,37 +21,9 @@
       </button>
     </div>
     <div class="song-list">
-      <div class="song">
-        <span class="index">1</span>
-        <span class="name">回忆的沙漏</span>
-      </div>
-      <div class="song">
-        <span class="index">1</span>
-        <span class="name">回忆的沙漏</span>
-      </div>
-      <div class="song">
-        <span class="index">1</span>
-        <span class="name">回忆的沙漏</span>
-      </div>
-      <div class="song">
-        <span class="index">1</span>
-        <span class="name">回忆的沙漏</span>
-      </div>
-      <div class="song">
-        <span class="index">1</span>
-        <span class="name">回忆的沙漏</span>
-      </div>
-      <div class="song">
-        <span class="index">1</span>
-        <span class="name">回忆的沙漏</span>
-      </div>
-      <div class="song">
-        <span class="index">1</span>
-        <span class="name">回忆的沙漏</span>
-      </div>
-      <div class="song">
-        <span class="index">1</span>
-        <span class="name">回忆的沙漏</span>
+      <div class="song" v-for="(song, index) in songs" :key="index" :data-id="song.id" @click="playSong(song)">
+        <span class="index">{{ index + 1 }}</span>
+        <span class="name">{{ song.name }}</span>
       </div>
     </div>
     <div class="tips">这是底部o(*￣▽￣*)ブ</div>
@@ -59,20 +31,41 @@
 </template>
 
 <script>
-import BScroll from "better-scroll";
 import PublicHeader from "@/components/Header.vue";
+import { mapActions } from "vuex";
 export default {
   components: { PublicHeader },
   data() {
     return {
-      scroll: null
+      scroll: null,
+
+      album: null,
+      songs: null,
+      uid: 0
     };
   },
-  mounted() {
-    console.log(this.$refs.wrapper);
-    this.$nextTick(() => {
-      //this.scroll = new BScroll(this.$refs.wrapper);
-    });
+  created() {
+    this.uid = this.$route.params.uid;
+    this.fetchData();
+  },
+  mounted() {},
+  methods: {
+    async fetchData() {
+      try {
+        let data = await this.$http.GetAlbumDetail({ id: this.uid });
+        this.album = data.album;
+        this.songs = data.songs;
+        console.log(this.songs);
+      } catch (e) {
+        console.log(e);
+      }
+    },
+    ...mapActions(["setCurrentSong"]),
+    playSong(song) {
+      const { id, name } = song;
+      const cover = this.album.picUrl;
+      this.setCurrentSong({ id, name, cover });
+    },
   }
 };
 </script>
@@ -82,6 +75,7 @@ export default {
 
 .album-detail {
   height: px2rem(1334);
+  overflow: auto;
 }
 
 .album-cover {

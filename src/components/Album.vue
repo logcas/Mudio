@@ -1,21 +1,16 @@
 <template>
-  <div class="album" @click="$router.push({ name: 'album', params: { uid } })">
-    <img class="cover" src="@/assets/cover.jpg">
-    <svg class="icon like" aria-hidden="true">
-      <use xlink:href="#iconxihuan"></use>
-    </svg>
-    <div class="name">A beautiful mindA beautiful mind</div>
+  <div class="album" @click="$router.push({ name: toRoute, params: { uid: data.id } })">
+    <img class="cover" :src="data.picUrl">
+    <div class="name">{{ data.name }}</div>
   </div>
 </template>
 
 <script>
 export default {
   props: {
-    uid: {
-      type: String,
-      default: '666',
-    }
-  }
+    data: Object,
+    toRoute: String,
+  },
 };
 </script>
 
