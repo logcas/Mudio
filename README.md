@@ -2,7 +2,7 @@
 
 A super light music player on web(for mobile).
 
-Undercontruction.
+Underconstruction.
 
 ## Screenshot
 
