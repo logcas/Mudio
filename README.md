@@ -1,36 +1,9 @@
 # Mudio
 
-A super light music player on web.
+A super light music player on web(for mobile).
 
-## Project setup
-```
-npm install
-```
+Undercontrusction.
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+## Screenshot
 
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Run your tests
-```
-npm run test
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Run your unit tests
-```
-npm run test:unit
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+![s](http://img.lxzmww.xyz/mudio.PNG)

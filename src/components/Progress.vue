@@ -13,19 +13,20 @@ export default {
   name: "progress-bar",
   props: {
     current: Number,
-    totalLength: Number,
+    total: Number,
   },
   computed: {
     currentProgress() {
-      return (this.current / this.totalLength) * 100 + "%";
+      return (this.current / this.total) * 100 + "%";
     }
   },
   data() {
     return {
       trackLeft: 0,
+      totalLength: 0,
 
       isMoving: false,
-      touchX: 0
+      touchX: 0,
     };
   },
   mounted() {
@@ -38,28 +39,28 @@ export default {
       this.calculateProgress(e);
     },
     handleTouchStart(e) {
-      console.log("touchstart");
       this.isMoving = true;
       document.addEventListener("touchmove", this.handleTouchMove);
       document.addEventListener("touchend", this.handleTouchEnd);
     },
     handleTouchMove(e) {
-      console.log("touchmove");
       if (!this.isMoving) return;
       this.calculateProgress(e);
     },
     handleTouchEnd(e) {
-      console.log("touchend");
       this.isMoving = false;
       document.removeEventListener("touchmove", this.handleTouchMove);
       document.removeEventListener("touchend", this.handleTouchEnd);
     },
     calculateProgress(e) {
       this.touchX = e.changedTouches[0].clientX;
-      this.current =
+      let newCurrentLength;
+      newCurrentLength =
         this.touchX - this.trackLeft > 0 ? this.touchX - this.trackLeft : 0;
-      this.current =
-        this.current < this.totalLength ? this.current : this.totalLength;
+      newCurrentLength =
+        newCurrentLength < this.totalLength ? newCurrentLength : this.totalLength;
+      let newCurrentTime = newCurrentLength / this.totalLength * this.total;
+      this.$emit('change-current', newCurrentTime);
     }
   }
 };

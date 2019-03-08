@@ -3,7 +3,7 @@
     <h1 class="title">
       Mudio
       <img
-        :src="currentSong.picUrl || '@/assets/cover.jpg'"
+        src="@/assets/album.png"
         class="playingAlbum"
         @click="showPlayer"
         :class="{ rotate: isPlaying }"

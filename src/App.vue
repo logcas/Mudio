@@ -3,7 +3,7 @@
     <transition name="fade">
       <router-view/>
     </transition>
-    <player :style="{ top: playerOffset }" style="z-index: 99999"></player>
+      <player :style="playerOffset" style="z-index: 99999"></player>
   </div>
 </template>
 
@@ -15,7 +15,9 @@ export default {
   computed: {
     ...mapGetters(["isShowPlayer"]),
     playerOffset() {
-      return this.isShowPlayer ? '0' : '100%';
+      return {
+        'top': this.isShowPlayer ? '0' : '100%',
+      }
     },
   }
 };

@@ -11,7 +11,7 @@
     </div>
     <div class="album">
       <img :src="currentSong.cover || '@/assets/cover.jpg'" class="album-cover">
-      <progress-bar id="progress" :current="playedLength" :totalLength="totalLength"></progress-bar>
+      <progress-bar id="progress" :current="playedLength" :total="totalLength" @change-current="setCurrentTime"></progress-bar>
     </div>
     <div class="album-info">
       <div>{{playedLength | timeTransform}}</div>
@@ -22,13 +22,13 @@
       <div>{{totalLength | timeTransform}}</div>
     </div>
     <div class="player-control">
-      <svg class="icon last" aria-hidden="true">
+      <svg class="icon last" aria-hidden="true" @click="playLast">
         <use xlink:href="#iconkuaitui"></use>
       </svg>
       <svg class="icon pause" aria-hidden="true" @click="play">
         <use :xlink:href="playIcon"></use>
       </svg>
-      <svg class="icon next" aria-hidden="true">
+      <svg class="icon next" aria-hidden="true" @click="playNext">
         <use xlink:href="#iconkuaijin"></use>
       </svg>
     </div>
@@ -38,7 +38,7 @@
 
 <script>
 import ProgressBar from "@/components/Progress.vue";
-import { mapGetters } from "vuex";
+import { mapGetters, mapMutations } from "vuex";
 export default {
   name: "player",
   components: { ProgressBar },
@@ -51,7 +51,7 @@ export default {
   data() {
     return {
       playedLength: 0,
-      totalLength: 0
+      totalLength: 0,
     };
   },
   filters: {
@@ -71,6 +71,7 @@ export default {
     }
   },
   methods: {
+    ...mapMutations(['playNext', 'playLast']),
     play() {
       this.$store.commit("setPlaying", !this.isPlaying);
       if (this.isPlaying) {
@@ -82,23 +83,9 @@ export default {
     hidePlayer() {
       this.$store.commit("showPlayer", false);
     },
-    showPlayerStatus() {
-      let {
-        currentSrc,
-        error,
-        buffered,
-        src,
-        currentTime,
-        paused
-      } = this.$refs.player;
-      console.log("----------------------------------------");
-      console.log("currentSrc:", currentSrc);
-      console.log("error: ", error);
-      console.log("buffered: ", buffered);
-      console.log("src: ", src);
-      console.log("currentTime: ", currentTime);
-      console.log("isPaused: ", paused);
-    }
+    setCurrentTime(e) {
+      this.$refs.player.currentTime = e;
+    },
   },
   mounted() {
     this.$refs.player.addEventListener("timeupdate", e => {
@@ -106,6 +93,7 @@ export default {
     });
     this.$refs.player.addEventListener("durationchange", e => {
       this.totalLength = e.target.duration;
+      this.playedLength = 0;
     });
   }
 };

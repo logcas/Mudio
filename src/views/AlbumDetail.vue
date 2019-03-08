@@ -39,7 +39,11 @@ export default {
     return {
       scroll: null,
 
-      album: null,
+      album: {
+        name: '',
+        artist: { name:'' },
+        picUrl: '',
+      },
       songs: null,
       uid: 0
     };
@@ -63,8 +67,9 @@ export default {
     ...mapActions(["setCurrentSong"]),
     playSong(song) {
       const { id, name } = song;
+      const artist = this.album.artist.name;
       const cover = this.album.picUrl;
-      this.setCurrentSong({ id, name, cover });
+      this.setCurrentSong({ id, name, cover, artist });
     },
   }
 };
