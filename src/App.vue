@@ -1,7 +1,7 @@
 <template>
   <div class="app">
-    <transition name="fade">
-      <router-view/>
+    <transition :name="transitionName">
+        <router-view/>
     </transition>
       <player :style="playerOffset" style="z-index: 99999"></player>
   </div>
@@ -10,8 +10,15 @@
 <script>
 import Player from "@/components/Player.vue";
 import { mapGetters } from "vuex";
+import transitionMixin from '@/mixin/transition';
 export default {
   components: { Player },
+  mixins: [transitionMixin],
+  data() {
+    return {
+      transitionName: '',
+    }
+  },
   computed: {
     ...mapGetters(["isShowPlayer"]),
     playerOffset() {
@@ -25,15 +32,7 @@ export default {
 
 
 <style lang="scss">
-.fade-enter-active,
-.fade-leave-active {
-  transition: all 0.5s ease-in-out;
-}
-
-.fade-enter,
-.fade-leave-to {
-  opacity: 0;
-}
+@import "@/assets/style/transition.scss";
 
 .app {
   position: relative;

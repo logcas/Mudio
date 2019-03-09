@@ -51,10 +51,5 @@ export default new Router({
       name: 'artist',
       component: () => import('./views/SingerDetail.vue'),
     },
-    {
-      path: '/player',
-      name: 'player',
-      component: () => import('./components/Player.vue'),
-    }
   ]
 })
