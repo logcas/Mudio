@@ -17,7 +17,8 @@
       <div>{{playedLength | timeTransform}}</div>
       <div>
         <span>{{ currentSong.name }}</span>
-        <p v-show="!currentSong.url">该音乐没有版权，无法播放</p>
+        <p v-show="hasNoSong">Mudio</p>
+        <p v-show="isNotAllowed && !hasNoSong">该音乐没有版权，无法播放</p>
       </div>
       <div>{{totalLength | timeTransform}}</div>
     </div>
@@ -32,7 +33,7 @@
         <use xlink:href="#iconkuaijin"></use>
       </svg>
     </div>
-    <audio v-show="false" ref="player" :src="currentSong.url" autoplay></audio>
+    <audio v-show="false" ref="player" :src="currentSong.url" autoplay @timeupdate="handleTimeUpdate" @durationchange="handleDurationChange"></audio>
   </div>
 </template>
 
@@ -43,10 +44,16 @@ export default {
   name: "player",
   components: { ProgressBar },
   computed: {
+    ...mapGetters(["currentSong", "isPlaying", "playList"]),
+    isNotAllowed() {
+      return !this.currentSong.url
+    },
+    hasNoSong() {
+      return this.playList.length === 0;
+    },
     playIcon() {
       return this.isPlaying ? "#iconpausezanting" : "#iconbofang";
     },
-    ...mapGetters(["currentSong", "isPlaying"])
   },
   data() {
     return {
@@ -86,16 +93,14 @@ export default {
     setCurrentTime(e) {
       this.$refs.player.currentTime = e;
     },
-  },
-  mounted() {
-    this.$refs.player.addEventListener("timeupdate", e => {
+    handleTimeUpdate(e) {
       this.playedLength = e.target.currentTime;
-    });
-    this.$refs.player.addEventListener("durationchange", e => {
+    },
+    handleDurationChange(e) {
       this.totalLength = e.target.duration;
       this.playedLength = 0;
-    });
-  }
+    },
+  },
 };
 </script>
 

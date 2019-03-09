@@ -10,7 +10,7 @@
       >
     </h1>
     <album-list name="新碟上架" :data="newestAlbum" toRoute="album"></album-list>
-    <album-list name="推荐歌单" :data="recommandSongs" toRoute="album"></album-list>
+    <album-list name="推荐歌单" :data="recommandSongs" toRoute="songlist"></album-list>
     <album-list name="热门歌手" :data="hottestSingers" toRoute="artist"></album-list>
   </div>
 </template>
