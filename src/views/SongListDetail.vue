@@ -55,10 +55,8 @@ export default {
     async fetchData() {
       try {
         let data = await this.$http.GetSongListDetail({ id: this.uid });
-        console.log(data);
         this.album = data.playlist;
         this.songs = this.album.tracks;
-        console.log(this.songs);
       } catch (e) {
         console.log(e);
       }

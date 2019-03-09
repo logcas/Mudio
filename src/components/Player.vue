@@ -11,7 +11,12 @@
     </div>
     <div class="album">
       <img :src="currentSong.cover || '@/assets/cover.jpg'" class="album-cover">
-      <progress-bar id="progress" :current="playedLength" :total="totalLength" @change-current="setCurrentTime"></progress-bar>
+      <progress-bar
+        id="progress"
+        :current="playedLength"
+        :total="totalLength"
+        @change-current="setCurrentTime"
+      ></progress-bar>
     </div>
     <div class="album-info">
       <div>{{playedLength | timeTransform}}</div>
@@ -33,7 +38,15 @@
         <use xlink:href="#iconkuaijin"></use>
       </svg>
     </div>
-    <audio v-show="false" ref="player" :src="currentSong.url" autoplay @timeupdate="handleTimeUpdate" @durationchange="handleDurationChange"></audio>
+    <audio
+      v-show="false"
+      ref="player"
+      :src="currentSong.url"
+      autoplay
+      @timeupdate="handleTimeUpdate"
+      @durationchange="handleDurationChange"
+      @ended="handleEnd"
+    ></audio>
   </div>
 </template>
 
@@ -46,19 +59,19 @@ export default {
   computed: {
     ...mapGetters(["currentSong", "isPlaying", "playList"]),
     isNotAllowed() {
-      return !this.currentSong.url
+      return !this.currentSong.url;
     },
     hasNoSong() {
       return this.playList.length === 0;
     },
     playIcon() {
       return this.isPlaying ? "#iconpausezanting" : "#iconbofang";
-    },
+    }
   },
   data() {
     return {
       playedLength: 0,
-      totalLength: 0,
+      totalLength: 0
     };
   },
   filters: {
@@ -78,7 +91,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations(['playNext', 'playLast']),
+    ...mapMutations(["playNext", "playLast"]),
     play() {
       this.$store.commit("setPlaying", !this.isPlaying);
       if (this.isPlaying) {
@@ -100,7 +113,10 @@ export default {
       this.totalLength = e.target.duration;
       this.playedLength = 0;
     },
-  },
+    handleEnd(e) {
+      this.playNext();
+    },
+  }
 };
 </script>
 
