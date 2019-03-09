@@ -17,4 +17,7 @@ export default {
 
   // 推荐歌单详情页
   GetSongListDetail: (p) => $get('/playlist/detail', p),
+
+  // 歌手详细页
+  GetSingerDetail: (p) => $get('/artists', p),
 }
