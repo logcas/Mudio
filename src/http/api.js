@@ -15,6 +15,9 @@ export default {
   // 获取歌曲URL
   GetSongURL: (p) => $get('/song/url', p),
 
+  // 获取歌曲歌词
+  GetSongLyric: (p) => $get('/lyric', p),
+
   // 推荐歌单详情页
   GetSongListDetail: (p) => $get('/playlist/detail', p),
 

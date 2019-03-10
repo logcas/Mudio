@@ -10,9 +10,7 @@
 </template>
 
 <script>
-import BScroll from "better-scroll";
 import Navbar from "@/components/Navbar.vue";
-import transitionMixin from "@/mixin/transition";
 export default {
   name: "home",
   components: { Navbar },

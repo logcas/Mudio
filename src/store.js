@@ -15,6 +15,7 @@ export default new Vuex.Store({
       name: '',
       artist: '',
       cover: '',
+      lyric: '',
     },
     playList: [], // 播放列表
     currentIdex: 0, // 播放列表正在播放的歌曲索引
@@ -102,8 +103,11 @@ export default new Vuex.Store({
         Toast('没有版权，无法播放', 1500);
         return;
       }
+      const { lrc: { lyric } } = await api.GetSongLyric({
+        id: payload.id
+      });
       let song = Object.assign(payload, {
-        url
+        url, lyric
       });
       commit('setSong', song);
       commit('addPlayList', song)

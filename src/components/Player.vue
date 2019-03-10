@@ -11,6 +11,7 @@
     </div>
     <div class="album">
       <img :src="currentSong.cover || '@/assets/cover.jpg'" class="album-cover">
+      <lyric :currentIndex="lyricIndex" :lyric="lyric"></lyric>
       <progress-bar
         id="progress"
         :current="playedLength"
@@ -52,10 +53,18 @@
 
 <script>
 import ProgressBar from "@/components/Progress.vue";
+import Lyric from '@/components/Lyric.vue';
 import { mapGetters, mapMutations } from "vuex";
+import lyricParser from '@/utils/lyricParser';
 export default {
   name: "player",
-  components: { ProgressBar },
+  components: { ProgressBar, Lyric },
+  watch: {
+    'currentSong.lyric': function(lyric) {
+      this.lyricParser.load(lyric);
+      this.lyric = this.lyricParser.getAllLyric();
+    },
+  },
   computed: {
     ...mapGetters(["currentSong", "isPlaying", "playList"]),
     isNotAllowed() {
@@ -71,7 +80,11 @@ export default {
   data() {
     return {
       playedLength: 0,
-      totalLength: 0
+      totalLength: 0,
+
+      lyricParser: new lyricParser(),
+      lyricIndex: 0,
+      lyric: [],
     };
   },
   filters: {
@@ -108,12 +121,16 @@ export default {
     },
     handleTimeUpdate(e) {
       this.playedLength = e.target.currentTime;
+      let idx = this.lyricParser.getCurrentIndex(e.target.currentTime);
+      let word = this.lyricParser.getCurrentWord(idx);
+      this.lyricIndex = idx;
     },
     handleDurationChange(e) {
       this.totalLength = e.target.duration;
       this.playedLength = 0;
+      this.lyricIndex = 0;
     },
-    handleEnd(e) {
+    handleEnd() {
       this.playNext();
     },
   }
