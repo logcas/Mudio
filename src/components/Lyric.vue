@@ -1,6 +1,6 @@
 <template>
-  <div class="lyric">
-    <div class="content" :style="offset">
+  <div class="lyric" v-swipe="handleSwipe">
+    <div class="content" :style="offset" v-show="isShowLyric">
       <p
         class="word"
         v-for="(item,idx) in lyric"
@@ -12,8 +12,11 @@
 </template>
 
 <script>
+import swipe from "@/directives/swipe";
+
 const LYRIC_HEIGHT = 0.5; // rem
 export default {
+  directives: { swipe },
   props: {
     currentIndex: {
       type: Number,
@@ -27,6 +30,16 @@ export default {
       return {
         transform: `translate(-50%,${offsetY})`
       };
+    }
+  },
+  data() {
+    return {
+      isShowLyric: true
+    };
+  },
+  methods: {
+    handleSwipe() {
+      this.isShowLyric = !this.isShowLyric;
     }
   }
 };
@@ -58,11 +71,13 @@ export default {
   .word {
     color: $unlikeColor;
     line-height: px2rem(50);
+    opacity: 0.5;
 
     &.hightlight {
       color: $lightColor;
       font-size: px2rem(40);
       font-weight: bold;
+      opacity: 1;
     }
   }
 }
