@@ -1,7 +1,6 @@
 export default {
   bind(el, { value }) {
     el.$touchStart = function(e) {
-      console.log(e);
       let touch = e.changedTouches[0];
       el.$touchX = touch.pageX;
       el.$isTouch = true;

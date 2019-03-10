@@ -1,13 +1,15 @@
 <template>
   <div class="lyric" v-swipe="handleSwipe">
-    <div class="content" :style="offset" v-show="isShowLyric">
-      <p
-        class="word"
-        v-for="(item,idx) in lyric"
-        :key="idx"
-        :class="{hightlight: currentIndex === idx }"
-      >{{ item }}</p>
-    </div>
+    <transition name="zoom">
+      <div class="content" :style="offset" v-show="isShowLyric">
+        <p
+          class="word"
+          v-for="(item,idx) in lyric"
+          :key="idx"
+          :class="{hightlight: currentIndex === idx }"
+        >{{ item }}</p>
+      </div>
+    </transition>
   </div>
 </template>
 
@@ -34,7 +36,7 @@ export default {
   },
   data() {
     return {
-      isShowLyric: true
+      isShowLyric: true,
     };
   },
   methods: {
@@ -47,6 +49,7 @@ export default {
 
 <style lang="scss" scoped>
 @import "@/assets/style/common.scss";
+@import "@/assets/style/transition.scss";
 
 .lyric {
   position: absolute;
