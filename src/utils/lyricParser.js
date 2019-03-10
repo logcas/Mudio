@@ -2,17 +2,28 @@ const timeTransform = Symbol();
 const divideLrc = Symbol();
 
 export default class lrcParser {
+  /**
+   * 
+   * @param {string} lrcText 歌词文本，非必须，可以从load函数载入
+   */
   constructor(lrcText) {
     this.lrc = lrcText || '';
     this.lyric = [];
     this[divideLrc]();
   }
-
+  /**
+   * 
+   * @param {string} lrcText 歌词文本
+   */
   load(lrcText) {
     this.lrc = lrcText;
     this[divideLrc]();
   }
 
+  /**
+   * @description 通过播放时间获取歌词文本索引
+   * @param {number} currentTime 当前播放时间
+   */
   getCurrentIndex(currentTime) {
     if(typeof currentTime !== 'number') currentTime = parseFloat(currentTime);
     if(isNaN(currentTime)) return -1;
@@ -52,13 +63,24 @@ export default class lrcParser {
   [divideLrc]() {
     const hasLrc = !!this.lrc;
     if(!hasLrc) return;
-    let lrc = this.lrc.split('\n').filter(content => content !== '');
-    lrc = lrc.map(content => {
-      let idx = content.indexOf(']');
-      if(idx === -1) return;
-      let time = this[timeTransform](content.slice(1, idx));
-      let words = content.slice(idx + 1);
-      return [time, words];
+    let _lrc = this.lrc.split('\n').filter(content => content !== '');
+    let lrc = [];
+    _lrc.forEach(content => {
+      let times = [];
+      let end = content.indexOf(']');
+      let start = content.indexOf('[');
+      while(end !== -1 && start !== -1) {
+        times.push(content.slice(start + 1, end));
+        content = content.slice(end + 1);
+        start = content.indexOf('[');
+        end = content.indexOf(']');
+      }
+      times.forEach(t => {
+        lrc.push([this[timeTransform](t), content]);
+      });
+    });
+    lrc.sort((a, b) => {
+      return a[0] - b[0];
     });
     this.lyric = lrc;
   }
