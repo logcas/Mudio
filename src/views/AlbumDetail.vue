@@ -9,7 +9,7 @@
       </div>
     </div>
     <div class="button-group">
-      <button class="btn">
+      <button class="btn" @click="addAllToPlayList">
         <svg class="icon" aria-hidden="true">
           <use xlink:href="#iconbofang"></use>
         </svg>播放
@@ -21,7 +21,13 @@
       </button>
     </div>
     <div class="song-list">
-      <div class="song" v-for="(song, index) in songs" :key="index" :data-id="song.id" @click="playSong(song)">
+      <div
+        class="song"
+        v-for="(song, index) in songs"
+        :key="index"
+        :data-id="song.id"
+        @click="playSong(song)"
+      >
         <span class="index">{{ index + 1 }}</span>
         <span class="name">{{ song.name }}</span>
       </div>
@@ -32,17 +38,20 @@
 
 <script>
 import PublicHeader from "@/components/Header.vue";
-import { mapActions } from "vuex";
+import { mapActions, mapMutations, mapGetters } from "vuex";
 export default {
   components: { PublicHeader },
+  computed: {
+    ...mapGetters(["playList", "isPlaying"])
+  },
   data() {
     return {
       scroll: null,
 
       album: {
-        name: '',
-        artist: { name:'' },
-        picUrl: '',
+        name: "",
+        artist: { name: "" },
+        picUrl: ""
       },
       songs: null,
       uid: 0
@@ -54,6 +63,8 @@ export default {
   },
   mounted() {},
   methods: {
+    ...mapActions(["setCurrentSong"]),
+    ...mapMutations(["addPlayList"]),
     async fetchData() {
       try {
         let data = await this.$http.GetAlbumDetail({ id: this.uid });
@@ -64,13 +75,24 @@ export default {
         console.log(e);
       }
     },
-    ...mapActions(["setCurrentSong"]),
     playSong(song) {
       const { id, name } = song;
       const artist = this.album.artist.name;
       const cover = this.album.picUrl;
       this.setCurrentSong({ id, name, cover, artist });
     },
+    addAllToPlayList() {
+      console.log('click');
+      this.songs.forEach((song, idx) => {
+        const { id, name } = song;
+        const artist = this.album.artist.name;
+        const cover = this.album.picUrl;
+        this.addPlayList({ id, name, cover, artist });
+        if (idx === 0) {
+          this.setCurrentSong({ id, name, cover, artist });
+        }
+      });
+    }
   }
 };
 </script>

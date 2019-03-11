@@ -18,7 +18,7 @@ export default new Vuex.Store({
       lyric: '',
     },
     playList: [], // 播放列表
-    currentIdex: 0, // 播放列表正在播放的歌曲索引
+    currentIndex: 0, // 播放列表正在播放的歌曲索引
   },
   getters: {
     isShowPlayer: (state) => {
@@ -71,24 +71,61 @@ export default new Vuex.Store({
       if (idx === -1) return;
       state.playList.splice(idx, 1);
     },
-    // 播放上一首
-    playLast(state) {
-      let idx = state.currentIdex;
-      idx = idx - 1 >= 0 ? idx - 1 : state.playList.length - 1;
-      let song = state.playList[idx];
-      state.currentSong = song;
-      state.currentIdex = idx;
-    },
-    // 下一首
-    playNext(state) {
-      let idx = state.currentIdex;
-      idx = idx + 1 < state.playList.length ? idx + 1 : 0;
-      let song = state.playList[idx];
-      state.currentSong = song;
-      state.currentIdex = idx;
-    },
   },
   actions: {
+    async playNext({ state, dispatch, commit }) {
+      let idx = state.currentIndex;
+      idx = idx + 1 < state.playList.length ? idx + 1 : 0;
+      let song = state.playList[idx];
+      state.currentIndex = idx;
+      if(!song.url) {
+        let _song = await dispatch('getSongResource', song.id);
+        if(!_song)  {
+          dispatch('playNext');
+          return;
+        }
+        state.playList[state.currentIndex] = _song;
+        commit('setSong', _song);
+      } else {
+        commit('setSong', song);
+        commit('setPlaying', true);
+      }
+    },
+    // 播放列表中的上一首
+    async playLast({ state, dispatch, commit }) {
+      let idx = state.currentIndex;
+      idx = idx - 1 >= 0 ? idx - 1 : state.playList.length - 1;
+      let song = state.playList[idx];
+      state.currentIndex = idx;
+      if(!song.url) {
+        let _song = await dispatch('getSongResource', song.id);
+        if(!_song)  {
+          dispatch('playNext');
+          return;
+        }
+        state.playList[state.currentIndex] = _song;
+        commit('setSong', _song);
+      } else {
+        commit('setSong', song);
+        commit('setPlaying', true);
+      }
+    },
+    // 获取当前歌曲URL和歌词
+    async getSongResource({ state }, id) {
+      console.log(id);
+      const { data } = await api.GetSongURL({
+        id,
+      });
+      const url = data[0].url;
+      if(!url) return;
+      const { lrc: { lyric } } = await api.GetSongLyric({
+        id,
+      });
+      let song = Object.assign(state.playList[state.currentIndex], {
+        url, lyric
+      });
+      return song;
+    },
     // 设置当前播放的歌曲
     async setCurrentSong({
       commit

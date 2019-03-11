@@ -54,7 +54,7 @@
 <script>
 import ProgressBar from "@/components/Progress.vue";
 import Lyric from '@/components/Lyric.vue';
-import { mapGetters, mapMutations } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 import lyricParser from '@/utils/lyricParser';
 export default {
   name: "player",
@@ -104,7 +104,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations(["playNext", "playLast"]),
+    ...mapActions(["playNext", "playLast"]),
     play() {
       this.$store.commit("setPlaying", !this.isPlaying);
       if (this.isPlaying) {
