@@ -1,7 +1,9 @@
 <template>
   <div class="app">
     <transition :name="transitionName">
+      <keep-alive>
         <router-view/>
+      </keep-alive>
     </transition>
       <player :style="playerOffset" style="z-index: 99999"></player>
   </div>

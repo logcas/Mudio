@@ -35,7 +35,7 @@ import { mapActions, mapMutations, mapGetters } from "vuex";
 export default {
   components: { PublicHeader },
   computed: {
-    ...mapGetters(['playList', 'isPlaying']),
+    ...mapGetters(['playList', 'isPlaying', 'singerId']),
   },
   data() {
     return {
@@ -52,18 +52,25 @@ export default {
   },
   created() {
     this.uid = this.$route.params.uid;
+    this.setSingerId(this.uid);
+    this.fetchData();
+  },
+  activated() {
+    let uid = this.$route.params.uid;
+    if(this.singerId === uid) return;
+    this.uid = uid;
+    this.setSingerId(this.uid);
     this.fetchData();
   },
   mounted() {},
   methods: {
     ...mapActions(["setCurrentSong"]),
-    ...mapMutations(["addPlayList"]),
+    ...mapMutations(["addPlayList", "setSingerId"]),
     async fetchData() {
       try {
         let data = await this.$http.GetSingerDetail({ id: this.uid });
         this.artist = data.artist;
         this.songs = data.hotSongs;
-        console.log(this.songs);
       } catch (e) {
         console.log(e);
       }
