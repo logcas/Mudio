@@ -28,11 +28,11 @@ export default {
       // 主页数据
       newestAlbum: [],
       recommandSongs: [],
-      hottestSingers: [],
+      hottestSingers: []
     };
   },
   computed: {
-    ...mapGetters(["isPlaying", 'currentSong'])
+    ...mapGetters(["isPlaying", "currentSong"])
   },
   created() {
     this.fetchData();
@@ -57,7 +57,6 @@ export default {
 
         let hottestSingers = await this.$http.GetHottestSingers();
         this.hottestSingers = hottestSingers.artists;
-
       } catch (e) {
         console.log(`error occured: ${e}`);
       }

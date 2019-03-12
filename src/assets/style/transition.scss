@@ -13,7 +13,10 @@
 .slideLeft-leave-active,
 .slideLeft-enter-active {
   position: absolute;
-  transition: all 0.5s ease-in-out;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  transition: all 0.5s ease;
 }
 
 .slideRight-enter {

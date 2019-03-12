@@ -1,16 +1,16 @@
 <template>
   <div class="nav">
-    <div class="nav-item" :class="{'on-active': currentIndex === 0 }" @click="switchPage(0, 'me')">
+    <div class="nav-item" :class="{'on-active': currentIndex === 1 }" @click="$router.push({ name: 'me'})">
       <svg class="icon" aria-hidden="true">
         <use xlink:href="#iconhtmal5icon02"></use>
       </svg>
     </div>
-    <div class="nav-item" :class="{'on-active': currentIndex === 1 }" @click="switchPage(1, 'discovery')">
+    <div class="nav-item" :class="{'on-active': currentIndex === 2 }" @click="$router.push({ name: 'discovery'})">
       <svg class="icon" aria-hidden="true">
         <use xlink:href="#icontansuob"></use>
       </svg>
     </div>
-    <div class="nav-item" :class="{'on-active': currentIndex === 2 }" @click="switchPage(2, 'setting')">
+    <div class="nav-item" :class="{'on-active': currentIndex === 3 }" @click="$router.push({ name: 'setting'})">
       <svg class="icon" aria-hidden="true">
         <use xlink:href="#iconshezhi"></use>
       </svg>
@@ -19,18 +19,30 @@
 </template>
 
 <script>
+const pageHook = {
+  'me': 1,
+  'discovery': 2,
+  'setting': 3,
+};
 export default {
   data() {
     return {
       currentIndex: 1,
     };
   },
-  methods: {
-    switchPage(index, name) {
-      this.currentIndex = index;
-      this.$router.push({ name });
+  watch: {
+    '$route': function(to) {
+      this.currentIndex = this.getIndex(to.name);
     },
   },
+  methods: {
+    getIndex(name) {
+      return pageHook[name] ? pageHook[name] : 0;
+    },
+  },
+  created() {
+    this.currentIndex = this.getIndex(this.$route.name);
+  }
 };
 </script>
 
