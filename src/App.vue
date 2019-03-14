@@ -5,7 +5,7 @@
         <router-view />
       </keep-alive>
     </transition>
-      <player :style="playerOffset" style="z-index: 99999"></player>
+    <player :style="playerOffset" style="z-index: 99999"></player>
   </div>
 </template>
 
@@ -28,6 +28,12 @@ export default {
         'top': this.isShowPlayer ? '0' : '100%',
       }
     },
+  },
+  mounted() {
+    /**
+     * @description 解决移动端 :active 伪类的问题
+     */
+    document.body.addEventListener('touchstart', function() {});
   }
 };
 </script>
@@ -42,4 +48,13 @@ export default {
   height: 100%;
   overflow: hidden;
 }
+
+#playlist {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
 </style>

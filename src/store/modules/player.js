@@ -29,6 +29,9 @@ export default {
     playList: (state) => {
       return state.playList;
     },
+    currentIndex: (state) => {
+      return state.currentIndex;
+    },
   },
   mutations: {
     // 设置播放状态
@@ -44,7 +47,7 @@ export default {
       state.currentSong = song;
     },
     // 加入到播放列表
-    addPlayList(state, song) {
+    addPlayList(state, { song, immediatePlay = false }) {
       let idx = -1;
       for (let i = 0; i < state.playList.length; ++i) {
         if (state.playList[i].id === song.id) {
@@ -52,8 +55,12 @@ export default {
           break;
         }
       }
-      if (idx !== -1) return;
+      if (idx !== -1) { 
+        if(immediatePlay) state.currentIndex = idx;
+        return;
+      }
       state.playList.push(song);
+      if(immediatePlay) state.currentIndex = state.playList.length - 1;
     },
     // 从播放列表中移除
     removePlayList(state, songId) {
@@ -165,7 +172,7 @@ export default {
         lyric
       });
       commit('setSong', song);
-      commit('addPlayList', song)
+      commit('addPlayList', { song, immediatePlay: true });
       commit('setPlaying', true);
       commit('showPlayer', true);
     },

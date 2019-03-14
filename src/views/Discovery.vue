@@ -42,6 +42,11 @@ export default {
       this.scroll = new BScroll(this.$parent.$el.children[0]);
     });
   },
+  activated() {
+    this.$nextTick(() => {
+      this.scroll = new BScroll(this.$parent.$el.children[0]);
+    });
+  },
   methods: {
     showPlayer() {
       this.$store.commit("showPlayer", true);

@@ -86,7 +86,7 @@ export default {
         const { id, name } = song;
         const artist = this.artist.name;
         const cover = this.artist.picUrl;
-        this.addPlayList({ id, name, cover, artist });
+        this.addPlayList({ song: { id, name, cover, artist }});
         if(idx === 0) {
           this.setCurrentSong({ id, name, cover, artist });
         }
