@@ -1,3 +1,10 @@
+/**
+ * @description 歌词解析器
+ * @author Lucas
+ * @version v0.0.1
+ */
+
+ // 私有变量
 const timeTransform = Symbol();
 const divideLrc = Symbol();
 
@@ -37,10 +44,12 @@ export default class lrcParser {
     return current - 1;
   }
 
+  // 根据索引获取某一句歌词
   getCurrentWord(index) {
     return this.lyric[index] ? this.lyric[index] : '';
   }
 
+  // 返回全部歌词
   getAllLyric() {
     return this.lyric.map(item => item[1]);
   }
@@ -69,6 +78,10 @@ export default class lrcParser {
       let times = [];
       let end = content.indexOf(']');
       let start = content.indexOf('[');
+      // 
+      // 因为有些歌词是重复的，因此格式为 [00:05:12][00:01:13] XXXXXXXXX 这类
+      // 需要循环把事件拿出来
+      // 
       while(end !== -1 && start !== -1) {
         times.push(content.slice(start + 1, end));
         content = content.slice(end + 1);
