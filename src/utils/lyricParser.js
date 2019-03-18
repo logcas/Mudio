@@ -8,6 +8,7 @@
 const timeTransform = Symbol();
 const divideLrc = Symbol();
 
+
 export default class lrcParser {
   /**
    * 

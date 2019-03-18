@@ -47,6 +47,8 @@
       @timeupdate="handleTimeUpdate"
       @durationchange="handleDurationChange"
       @ended="handleEnd"
+      @pause="handlePause"
+      @play="handlePlay"
     ></audio>
   </div>
 </template>
@@ -55,13 +57,13 @@
 import ProgressBar from "@/components/Progress.vue";
 import Lyric from '@/components/Lyric.vue';
 import { mapGetters, mapActions } from "vuex";
-import lyricParser from '@/utils/lyricParser';
+import lyricParser from '@/utils/parser';
 export default {
   name: "player",
   components: { ProgressBar, Lyric },
   watch: {
     'currentSong.lyric': function(lyric) {
-      this.lyricParser.load(lyric);
+      this.lyricParser.load(lyric, this.lyricHandler.bind(this));
       this.lyric = this.lyricParser.getAllLyric();
     },
   },
@@ -116,22 +118,33 @@ export default {
     hidePlayer() {
       this.$store.commit("showPlayer", false);
     },
-    setCurrentTime(e) {
-      this.$refs.player.currentTime = e;
+    setCurrentTime(current) {
+      this.$refs.player.currentTime = current;
+      this.lyricParser.play(current * 1000);
     },
     handleTimeUpdate(e) {
       this.playedLength = e.target.currentTime;
-      let idx = this.lyricParser.getCurrentIndex(e.target.currentTime);
-      let word = this.lyricParser.getCurrentWord(idx);
-      this.lyricIndex = idx;
+      //this.lyricParser.play(e.target.currentTime);
+      //let idx = this.lyricParser.getCurrentIndex(e.target.currentTime);
+      //let word = this.lyricParser.getCurrentWord(idx);
+      //this.lyricIndex = idx;
     },
     handleDurationChange(e) {
       this.totalLength = e.target.duration;
       this.playedLength = 0;
-      this.lyricIndex = 0;
+      this.lyricParser.play();
     },
     handleEnd() {
       this.playNext();
+    },
+    lyricHandler(word, index) {
+      this.lyricIndex = index;
+    },
+    handlePause() {
+      this.lyricParser.pause();
+    },
+    handlePlay(e) {
+      this.lyricParser.play(e.target.currentTime * 1000);
     },
   }
 };
