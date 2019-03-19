@@ -1,5 +1,6 @@
 import axios from 'axios';
 import config from '@/config';
+import Toast from '@/components/Toast';
 
 if(process.env.NODE_ENV === 'production') {
   axios.defaults.baseURL = config.prod.baseUrl;
@@ -19,8 +20,7 @@ axios.interceptors.response.use(
     }
   },
   error => {
-    console.log(error);
-    return Promise.reject(error);
+    Toast(error, 10000);
   },
 );
 
