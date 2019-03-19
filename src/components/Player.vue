@@ -99,9 +99,9 @@ export default {
       val = val % 60;
       let s = val;
       let time = "";
-      time += s > 10 ? s : "0" + s;
-      time = (m > 10 ? m : "0" + m) + ":" + time;
-      h && (time = (h > 10 ? h : "0" + h) + ":" + time);
+      time += s >= 10 ? s : "0" + s;
+      time = (m >= 10 ? m : "0" + m) + ":" + time;
+      h && (time = (h >= 10 ? h : "0" + h) + ":" + time);
       return time;
     }
   },
